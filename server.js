@@ -2,7 +2,9 @@
 let database = {
   users: {},
   articles: {},
-  nextArticleId: 1
+  comments: {},
+  nextArticleId: 1,
+  nextCommentId: 1
 };
 
 const routes = {
@@ -21,11 +23,24 @@ const routes = {
     'PUT': updateArticle,
     'DELETE': deleteArticle
   },
+  '/comments': {
+    'POST': createComment
+  },
+  '/comments/:id': {
+    'PUT': updateComment,
+    'DELETE': deleteComment
+  },
   '/articles/:id/upvote': {
     'PUT': upvoteArticle
   },
   '/articles/:id/downvote': {
     'PUT': downvoteArticle
+  },
+  '/comments/:id/upvote': {
+    'PUT': upvoteComment
+  },
+  '/comments/:id/downvote': {
+    'PUT': downvoteComment
   }
 };
 
@@ -184,6 +199,18 @@ function deleteArticle(url, request) {
   return response;
 }
 
+function createComment() {
+
+}
+
+function updateComment() {
+
+}
+
+function deleteComment() {
+
+}
+
 function upvoteArticle(url, request) {
   const id = Number(url.split('/').filter(segment => segment)[1]);
   const username = request.body && request.body.username;
@@ -218,6 +245,14 @@ function downvoteArticle(url, request) {
   }
 
   return response;
+}
+
+function upvoteComment() {
+
+}
+
+function downvoteComment() {
+
 }
 
 function upvote(item, username) {
