@@ -199,8 +199,32 @@ function deleteArticle(url, request) {
   return response
 }
 
-function createComment() {
+function createComment(url, request) {
+  const requestComment = request.body && request.body.comment
+  const response = {}
 
+  if (requestComment && requestComment.body && requestComment.username &&
+      database.users[requestComment.username] && database.articles[requestComment.articleId]) {
+    const comment = {
+      id: database.nextCommentId++,
+      body: requestComment.body,
+      username: requestComment.username,
+      articleId: requestComment.articleId,
+      upvotedBy: [],
+      downvotedBy: []
+    }
+
+    database.comments[comment.id] = comment
+    database.users[comment.username].commentIds.push(comment.id)
+    database.articles[comment.articleId].commentIds.push(comment.id)
+
+    response.body = {comment: comment}
+    response.status = 201
+  } else {
+    response.status = 400
+  }
+
+  return response
 }
 
 function updateComment() {
