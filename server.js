@@ -322,46 +322,72 @@ function downvoteArticle(url, request) {
 }
 
 function upvoteComment(url, request) {
+<<<<<<< HEAD
   // Gets ID, username, comment from database
+=======
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
   const id = Number(url.split('/').filter(segment => segment)[1])
   const username = request.body && request.body.username
   let savedComment = database.comments[id]
   const response = {}
 
+<<<<<<< HEAD
   // Determines if there is a comment from database and valid user
   if (savedComment && database.users[username]) {
     // Upvotes Comment and sets 200 statusCode
+=======
+  if (savedComment && database.users[username]) {
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
     savedComment = upvote(savedComment, username)
 
     response.body = {comment: savedComment}
     response.status = 200
   } else {
+<<<<<<< HEAD
     // Returns 400 statusCode
     response.status = 400
   }
   // Returns response
+=======
+    response.status = 400
+  }
+
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
   return response
 }
 
 function downvoteComment(url, request) {
+<<<<<<< HEAD
   // Gets ID, username, comment from database
+=======
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
   const id = Number(url.split('/').filter(segment => segment)[1])
   const username = request.body && request.body.username
   let savedComment = database.comments[id]
   const response = {}
 
+<<<<<<< HEAD
   // Determines if there is a comment from database and valid user
   if (savedComment && database.users[username]) {
     // Upvotes Comment and sets 200 statusCode
+=======
+  if (savedComment && database.users[username]) {
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
     savedComment = downvote(savedComment, username)
 
     response.body = {comment: savedComment}
     response.status = 200
   } else {
+<<<<<<< HEAD
     // Returns 400 statusCode
     response.status = 400
   }
   // Returns response
+=======
+    response.status = 400
+  }
+
+>>>>>>> 7c52142a1044eb942865e78fc21d19a6339da70d
   return response
 }
 
