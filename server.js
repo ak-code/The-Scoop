@@ -199,12 +199,16 @@ function deleteArticle(url, request) {
   return response
 }
 
+// Creates Comments
 function createComment(url, request) {
+  // Gets Comment from request
   const requestComment = request.body && request.body.comment
   const response = {}
 
+  // Determines that there is a comment that has a body, a valid username, and a valid article
   if (requestComment && requestComment.body && requestComment.username &&
       database.users[requestComment.username] && database.articles[requestComment.articleId]) {
+    // Sets the request comment into comment object
     const comment = {
       id: database.nextCommentId++,
       body: requestComment.body,
@@ -214,6 +218,7 @@ function createComment(url, request) {
       downvotedBy: []
     }
 
+    // Creates comment in database and sets 201 statusCode
     database.comments[comment.id] = comment
     database.users[comment.username].commentIds.push(comment.id)
     database.articles[comment.articleId].commentIds.push(comment.id)
@@ -221,22 +226,28 @@ function createComment(url, request) {
     response.body = {comment: comment}
     response.status = 201
   } else {
+    // Sets 400 statusCode
     response.status = 400
   }
 
+  // Returns response
   return response
 }
 
 function updateComment(url, request) {
+  // Gets Id, comment from request, and comment from database
   const id = Number(url.split('/').filter(segment => segment)[1])
   const savedComment = database.comments[id]
   const requestComment = request.body && request.body.comment
   const response = {}
 
+  // Sets 400 statusCode if there isn't an ID or comment from request
   if (!id || !requestComment) {
     response.status = 400
-  } else if (!savedComment) {
+  // Sets 404 statusCode if there isn't a comment from data
+  }else if (!savedComment) {
     response.status = 404
+  // Updates Comment and sets 200 statusCode
   } else {
     savedComment.body = requestComment.body || savedComment.body
 
@@ -244,15 +255,19 @@ function updateComment(url, request) {
     response.status = 200
   }
 
+  // Returns response
   return response
 }
 
 function deleteComment(url, request) {
+  // Gets Id and comment from request
   const id = Number(url.split('/').filter(segment => segment)[1])
   const savedComment = database.comments[id]
   const response = {}
 
+  // Determines if there is a comment from request
   if (savedComment) {
+    // Deletes Comment and Sets 204 statusCode
     database.comments[id] = null
 
     const userCommentIds = database.users[savedComment.username].commentIds
@@ -263,8 +278,10 @@ function deleteComment(url, request) {
 
     response.status = 204
   } else {
+    // Sets 404 statusCode
     response.status = 404
   }
+  // Returns response
   return response
 }
 
@@ -305,38 +322,46 @@ function downvoteArticle(url, request) {
 }
 
 function upvoteComment(url, request) {
+  // Gets ID, username, comment from database
   const id = Number(url.split('/').filter(segment => segment)[1])
   const username = request.body && request.body.username
   let savedComment = database.comments[id]
   const response = {}
 
+  // Determines if there is a comment from database and valid user
   if (savedComment && database.users[username]) {
+    // Upvotes Comment and sets 200 statusCode
     savedComment = upvote(savedComment, username)
 
     response.body = {comment: savedComment}
     response.status = 200
   } else {
+    // Returns 400 statusCode
     response.status = 400
   }
-
+  // Returns response
   return response
 }
 
 function downvoteComment(url, request) {
+  // Gets ID, username, comment from database
   const id = Number(url.split('/').filter(segment => segment)[1])
   const username = request.body && request.body.username
   let savedComment = database.comments[id]
   const response = {}
 
+  // Determines if there is a comment from database and valid user
   if (savedComment && database.users[username]) {
+    // Upvotes Comment and sets 200 statusCode
     savedComment = downvote(savedComment, username)
 
     response.body = {comment: savedComment}
     response.status = 200
   } else {
+    // Returns 400 statusCode
     response.status = 400
   }
-
+  // Returns response
   return response
 }
 
